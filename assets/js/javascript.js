@@ -1,10 +1,11 @@
 var buttonEl = document.querySelector("#save-task");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
-var createTaskHandler = function () {
+var createTaskHandler = function() {
     var listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
     listItemEl.textContent = "This is a new task.";
     tasksToDoEl.appendChild(listItemEl);
-}
+};
+
 buttonEl.addEventListener("click", createTaskHandler); // this has to stay below it's function otherwise it'll come back undefined (top down reading)
