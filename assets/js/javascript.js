@@ -7,6 +7,14 @@ var taskFormHandler = function(event) {
     //In this case, we're selecting the <input> element on the page that has a name attribute set to a value of "task-name".
     var taskNameInput = document.querySelector("input[name='task-name']").value;
     var taskTypeInput = document.querySelector("select[name='task-type']").value;
+
+    // check in input values are empty strings
+    if (!taskNameInput || !taskTypeInput) {
+        alert("You need to fill out the task form!");
+        return false;
+    }
+    // reset is specifically and ONLY for form reset values so once you submit, they clear so you can start inputing in things again
+    formEl.reset();
     // package up data as an object
     var taskDataObj = {
         name: taskNameInput,
