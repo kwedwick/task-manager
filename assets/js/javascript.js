@@ -275,6 +275,54 @@ var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+var loadTasks = function() {
+    // get task items from local storage
+    tasks = localStorage.getItem("tasks");
+    if (tasks === null) {
+        tasks = [];
+        return false;
+    };
+    // converts tasks from stringified format back into an array of objects
+    tasks = JSON.parse(tasks);
+    console.log(tasks);
+
+    // iterates through tasks array and creates task elements on the page from it
+    for (var i = 0; i < tasks.length; i++) {
+        taskIDCounter = tasks[i].id
+
+        var listItemEl = document.createElement("li");
+        // re-creating the li element
+        listItemEl.className = "task-item";
+        listItemEl.setAttribute("data-task-id", tasks[i].id)
+        listItemEl.setAttribute("draggable", true)
+        // re-creating the div
+        var taskInfoEl = document.createElement("div");
+        // give the div a class name
+        taskInfoEl.className = "task-info";
+        // add HTML content to div
+        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+        listItemEl.appendChild(taskInfoEl);
+
+        // appending the tasks to the li element
+        var taskActionsEl = createTaskActions(tasks[i].id);
+        listItemEl.appendChild(taskActionsEl);
+        console.log(listItemEl);
+
+        if (tasks[i].status === "to do") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
+            tasksToDoEl.appendChild(listItemEl);
+        } else if (tasks[i].status === "in progress") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 1;
+            tasksInProgressEl.appendChild(listItemEl);
+        } else if (tasks[i].status === "completed") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+            tasksCompletedEl.appendChild(listItemEl);
+        }
+        taskIDCounter++;
+
+    };
+};
+
 // this has to stay below it's function otherwise it'll come back undefined (top down reading)
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
@@ -283,3 +331,4 @@ pageContentEl.addEventListener("dragstart", dragTaskHandler);
 pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 pageContentEl.addEventListener("drop", dropTaskHandler);
 pageContentEl.addEventListener("dragleave", dragLeaveHandler);
+loadTasks();
