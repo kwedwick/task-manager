@@ -51,7 +51,15 @@ var completeEditTask = function (taskName, taskType, taskId) {
     taskSelected.querySelector("span.task-type").textContent = taskType;
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
-
+    
+    // loop through tasks array and task object with new content
+    for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === parseInt(taskId)) {
+            tasks[i].name = taskName;
+            tasks[i].type = taskType;
+        }
+    };
+    saveTasks();
     alert("Task Updated!");
 };
 
@@ -78,6 +86,7 @@ var createTaskEl = function (taskDataObj) {
     // push an ID to the object from taskFormHandler
     taskDataObj.id = taskIDCounter;
     tasks.push(taskDataObj);
+    saveTasks();
 
     // pushes li into ol
     tasksToDoEl.appendChild(listItemEl);
@@ -154,19 +163,10 @@ var editTask = function (taskId) {
     var taskName = taskSelected.querySelector("h3.task-name").textContent;
     var taskType = taskSelected.querySelector("span.task-type").textContent;
 
-    // loop through tasks array and task object with new content
-    for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i].id === parseInt(taskId)) {
-            tasks[i].name = taskName;
-            tasks[i].type = taskType;
-        }
-    };
-
     // this calls the task name and type into the input and select fields on the form
     document.querySelector("input[name='task-name']").value = taskName;
     document.querySelector("select[name='task-type']").value = taskType;
     document.querySelector("#save-task").textContent = "Save Task";
-
     formEl.setAttribute("data-task-id", taskId);
 };
 
@@ -185,6 +185,7 @@ var deleteTask = function (taskId) {
     }
     // resassign tasks array to be the same as the updatedTaskArr
     tasks = updatedTaskArr;
+    saveTasks();
 };
 
 var taskStatusChangeHandler = function (event) {
@@ -212,6 +213,7 @@ var taskStatusChangeHandler = function (event) {
             tasks[i].status = statusValue;
         }
     }
+    saveTasks();
 };
 
 var dragTaskHandler = function (event) {
@@ -259,7 +261,7 @@ var dropTaskHandler = function (event) {
             tasks[i].status = statusSelectEl.value.toLowerCase();
         }    
     }
-    console.log(tasks);
+    saveTasks();
 };
 
 var dragLeaveHandler = function(event) {
@@ -267,6 +269,10 @@ var dragLeaveHandler = function(event) {
     if (taskListEl) {
         taskListEl.removeAttribute("style");
     }
+};
+
+var saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 // this has to stay below it's function otherwise it'll come back undefined (top down reading)
