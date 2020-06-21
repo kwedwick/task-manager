@@ -295,6 +295,7 @@ var loadTasks = function() {
         listItemEl.className = "task-item";
         listItemEl.setAttribute("data-task-id", tasks[i].id)
         listItemEl.setAttribute("draggable", true)
+        console.log(listItemEl)
         // re-creating the div
         var taskInfoEl = document.createElement("div");
         // give the div a class name
